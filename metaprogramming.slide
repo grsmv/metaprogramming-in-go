@@ -104,13 +104,13 @@ Appeared in Go version 1.8
 * Metaprogramming in Go: embeddable languages
 
 *Otto* - a JavaScript interpreter in Go
-https://github.com/robertkrimen/otto
+.link https://github.com/robertkrimen/otto https://github.com/robertkrimen/otto
 
 *gopher-lua* - VM and compiler for Lua in Go
-https://github.com/yuin/gopher-lua
+.link https://github.com/yuin/gopher-lua https://github.com/yuin/gopher-lua
 
 *zygomys* - A 100% Golang, easy-to-use Lisp
-https://github.com/glycerine/zygomys
+.link https://github.com/glycerine/zygomys https://github.com/glycerine/zygomys
 
 * Lua
 
@@ -122,3 +122,7 @@ https://github.com/glycerine/zygomys
 * gopher-lua: example
 
 	./lua/example.go
+
+* Links
+
+.link https://github.com/grsmv/metaprogramming-in-go https://github.com/grsmv/metaprogramming-in-go
