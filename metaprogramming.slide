@@ -1,0 +1,124 @@
+Metaprogramming in Go: creating monsters with (almost) bare hands
+
+Serhii Herasymov
+SoftServe
+sgeras@softserveinc.com
+
+* What is metaprogramming?
+
+Metaprogramming is a programming technique in which computer programs have the ability to treat programs as their data.
+
+Metaprogramming can be used to move computations from run-time to compile-time, to generate code using compile time computations, and to enable self-modifying code.
+
+Metaprogramming is writing programs that operate on other programs. So writing:
+
+- Compilers, Interpreters and Assemblers
+- Linkers and Loaders
+- Debuggers and Profilers
+is metaprogramming. 
+
+* Metaprogramming in other languages: Ruby
+
+One of the most impressive aspects of Ruby is its metaprogramming capabilities. As a dynamic language, Ruby gives you the freedom to define methods and even classes during runtime. 
+
+	class MyGhostClass
+	  def method_missing(name, *args)
+	    puts "#{name} was called with arguments: #{args.join(',')}"
+	  end
+	end
+
+	m = MyGhostClass.new
+	m.awesome_method("one", "two") # => awesome_method was called with arguments: one,two
+	m.another_method("three", "four") # => another_method was called with arguments: three,four
+
+* Metaprogramming in other languages: Clojure
+
+Clojure is a dialect of Lisp and while it departs with some features of "traditional" Lisps, the fundamentals are there. One very powerful feature that comes with it is macros, a way to do metaprogramming using the language itself. Metaprogramming in Clojure means constructing a tree [of S-expressions, or lists]. This enables very powerful DSLs (domain-specific languages).
+
+	(defmacro unless
+	  "Similar to if but negates the condition"
+	  [condition & forms]
+	  `(if (not ~condition)
+	     ~@forms))
+
+	(macroexpand-1 '(unless (= 1 2) true false))
+	;= (if (clojure.core/not (= 1 2)) true false)
+
+* Metaprogramming in other languages: Julia
+
+The strongest legacy of Lisp in the Julia language is its metaprogramming support. Like Lisp, Julia represents its own code as a data structure of the language itself. 
+
+	prog = "1 + 1"
+	ex1 = parse(prog)
+	typeof(ex1) # => Expr
+	ex2 = Expr(:call, :+, 1, 1)
+
+* Metaprogramming in other languages: JavaScript
+
+	eval
+
+* Metaprogramming in Go
+
+* Plugins
+
+Appeared in Go version 1.8
+
+*Value*
+
+- Modularization
+- Dynamic code loading
+- Code decoupling
+- Encapsulation
+
+*Caveats*
+
+- New plugin build mode is currently only supported on Linux and macOS
+- Minor issues with debugging
+
+* Plugins: package internals
+
+
+    // Plugin type reflects loaded Go plugin.
+    type Plugin
+
+        // Open opens a Go plugin. If a path has already been opened, then the existing
+        // *Plugin is returned. It is safe for concurrent use by multiple goroutines.
+        func Open(path string) (*Plugin, error)
+
+        // Lookup searches for a symbol named symName in plugin p. A symbol is any exported
+        // variable or function. It reports an error if the symbol is not found. It is safe
+        // for concurrent use by multiple goroutines.
+        func (p *Plugin) Lookup(symName string) (Symbol, error)
+
+    // A Symbol is a pointer to a variable or function.
+    type Symbol
+
+* Plugins: example
+
+	./plugins/example.go
+
+* Plugins: typical architecture
+
+.image plugins_typical_diagram.svg
+
+* Metaprogramming in Go: embeddable languages
+
+*Otto* - a JavaScript interpreter in Go
+https://github.com/robertkrimen/otto
+
+*gopher-lua* - VM and compiler for Lua in Go
+https://github.com/yuin/gopher-lua
+
+*zygomys* - A 100% Golang, easy-to-use Lisp
+https://github.com/glycerine/zygomys
+
+* Lua
+
+- Lua is a lightweight, multi-paradigm programming language designed primarily for embedded use in applications.
+- Commonly described as a "multi-paradigm" language, providing a small set of general features that can be extended to fit different problem types. 
+- Allows programmers to implement namespaces, classes, and other related features using its single table implementation; first-class functions allow the employment of many techniques from functional programming; and full lexical scoping allows fine-grained information hiding to enforce the principle of least privilege.
+- Supports only a small number of atomic data structures such as boolean values, numbers (double-precision floating point and 64-bit integers by default), and strings.
+
+* gopher-lua: example
+
+	./lua/example.go
